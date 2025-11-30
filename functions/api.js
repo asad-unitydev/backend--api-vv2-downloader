@@ -10,13 +10,42 @@ const router = express.Router();
 // Middleware
 app.use(express.json());
 
+const axios = require('axios');
+
+// Helper to expand short URLs
+async function expandUrl(shortUrl) {
+  try {
+    const response = await axios.head(shortUrl, {
+      maxRedirects: 5,
+      validateStatus: (status) => status >= 200 && status < 400,
+    });
+    return response.request.res.responseUrl || shortUrl; // axios provides final URL here
+  } catch (error) {
+    console.error("Error expanding URL:", error.message);
+    return shortUrl; // Fallback to original
+  }
+}
+
 // TikTok Endpoint
 router.get('/tiktok', async (req, res) => {
   try {
-    const { url } = req.query;
+    let { url } = req.query;
     if (!url) return res.status(400).json({ error: 'URL is required' });
 
+    // Expand URL if it's a short link
+    if (url.includes('t.tiktok.com') || url.includes('vm.tiktok.com')) {
+      url = await expandUrl(url);
+    }
+
+    console.log("Processing TikTok URL:", url);
+
     const data = await tiktok.tiktokdl(url);
+
+    // Check if data is valid
+    if (!data || (!data.video && !data.noWatermark)) {
+      throw new Error("Failed to scrape video data. The link might be invalid or TikTok has blocked the scraper.");
+    }
+
     // Ensure we return a consistent structure
     res.json({
       status: 'success',
@@ -29,7 +58,11 @@ router.get('/tiktok', async (req, res) => {
       stats: data.stats
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("TikTok API Error:", error);
+    res.status(500).json({
+      error: error.message,
+      details: "Please try a different link or try again later."
+    });
   }
 });
 
