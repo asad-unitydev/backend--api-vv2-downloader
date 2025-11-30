@@ -1,0 +1,40 @@
+redirectsOrigin = "config"
+plugins = []
+functionsDirectory = "E:\\video_downloader\\backend_api\\functions"
+functionsDirectoryOrigin = "config-v1"
+headers = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "E:\\video_downloader\\backend_api"
+publishOrigin = "default"
+functions = "E:\\video_downloader\\backend_api\\functions"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[[redirects]]
+from = "/api/*"
+to = "/.netlify/functions/api/:splat"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
