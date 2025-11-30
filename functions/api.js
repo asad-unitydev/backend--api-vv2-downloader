@@ -76,6 +76,9 @@ router.get('/', (req, res) => {
   res.json({ status: 'API is running', version: '1.0.0' });
 });
 
-app.use('/api', router);
+// Handle both /api prefix (from redirect) and root (direct function access)
+app.use('/.netlify/functions/api', router); // Direct access
+app.use('/api', router); // Redirect access
+app.use('/', router); // Fallback
 
 module.exports.handler = serverless(app);
