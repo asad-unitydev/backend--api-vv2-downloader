@@ -1,6 +1,6 @@
 redirectsOrigin = "config"
 plugins = []
-functionsDirectory = "E:\\video_downloader\\backend_api\\functions"
+functionsDirectory = "E:\\appdev\\MyPlayyerandDownloader\\backend_api\\functions"
 functionsDirectoryOrigin = "config-v1"
 headers = []
 
@@ -9,9 +9,9 @@ headers = []
 [functions."*"]
 
 [build]
-publish = "E:\\video_downloader\\backend_api"
+publish = "E:\\appdev\\MyPlayyerandDownloader\\backend_api"
 publishOrigin = "default"
-functions = "E:\\video_downloader\\backend_api\\functions"
+functions = "E:\\appdev\\MyPlayyerandDownloader\\backend_api\\functions"
 
 [build.environment]
 
